@@ -1,0 +1,36 @@
+<template>
+  <div class="left-sidebar w-[60px] fixed left-0 top-0 h-full bg-[#252525] flex flex-col">
+    <div class="menu-items space-y-2 py-4">
+      <div v-for="(item, index) in menuItems" 
+           :key="index"
+           class="menu-item h-[50px] flex-center cursor-pointer hover:bg-[#333]"
+           @click="handleMenuClick(item.route)">
+        <el-icon class="text-xl"><component :is="item.icon" /></el-icon>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script setup>
+import { ref } from 'vue'
+import { useRouter } from 'vue-router'
+import {
+  HomeFilled,
+  Setting,
+  Tools,
+  ChatDotSquare,
+} from '@element-plus/icons-vue'
+
+const router = useRouter()
+
+const menuItems = ref([
+  { icon: 'HomeFilled', route: '/' },
+  { icon: 'Tools', route: '/test' },
+  { icon: 'ChatDotSquare', route: '/chat' },
+  { icon: 'Setting', route: '/settings' },
+])
+
+const handleMenuClick = (route) => {
+  router.push(route)
+}
+</script> 
