@@ -18,7 +18,7 @@ import {
   HomeFilled,
   Setting,
   Tools,
-  ChatDotSquare,
+  Timer,
 } from '@element-plus/icons-vue'
 
 const router = useRouter()
@@ -26,7 +26,7 @@ const router = useRouter()
 const menuItems = ref([
   { icon: 'HomeFilled', route: '/' },
   { icon: 'Tools', route: '/test' },
-  { icon: 'ChatDotSquare', route: '/chat' },
+  { icon: 'Timer', route: '/time', title: '时间转换' },
   { icon: 'Setting', route: '/settings' },
 ])
 

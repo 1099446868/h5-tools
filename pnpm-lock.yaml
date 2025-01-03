@@ -26,6 +26,9 @@ importers:
       '@tauri-apps/plugin-shell':
         specifier: ~2
         version: 2.2.0
+      dayjs:
+        specifier: ^1.11.13
+        version: 1.11.13
       element-plus:
         specifier: ^2.9.1
         version: 2.9.1(vue@3.5.13)

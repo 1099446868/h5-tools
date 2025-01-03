@@ -19,19 +19,11 @@ const routes = [
     }
   },
   {
-    path: '/chat',
-    name: 'Chat',
-    component: () => import('../views/Chat.vue'),
+    path: '/time',
+    name: 'TimeConverter',
+    component: () => import('../views/TimeConverter.vue'),
     meta: {
-      title: '交流群'
-    }
-  },
-  {
-    path: '/settings',
-    name: 'Settings',
-    component: () => import('../views/Settings.vue'),
-    meta: {
-      title: '设置'
+      title: '时间转换'
     }
   }
 ]
