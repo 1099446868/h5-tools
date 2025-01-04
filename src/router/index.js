@@ -25,6 +25,15 @@ const routes = [
     meta: {
       title: '时间转换'
     }
+  },
+  // 添加API测试工具路由
+  {
+    path: '/api-test',
+    name: 'ApiTester',
+    component: () => import('../views/ApiTester.vue'),
+    meta: {
+      title: 'API测试'
+    }
   }
 ]
 

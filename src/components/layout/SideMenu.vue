@@ -19,6 +19,7 @@ import {
   Setting,
   Tools,
   Timer,
+  Connection,
 } from '@element-plus/icons-vue'
 
 const router = useRouter()
@@ -27,6 +28,7 @@ const menuItems = ref([
   { icon: 'HomeFilled', route: '/' },
   { icon: 'Tools', route: '/test' },
   { icon: 'Timer', route: '/time', title: '时间转换' },
+  { icon: 'Connection', route: '/api-test', title: 'API测试' },
   { icon: 'Setting', route: '/settings' },
 ])
 
