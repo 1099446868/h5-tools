@@ -1,5 +1,5 @@
 <template>
-  <div class="title-bar h-[40px] bg-[#252525] flex items-center justify-between px-4"  data-tauri-drag-region>
+  <div class="title-bar h-[40px] bg-[#303030] flex items-center justify-between px-4"  data-tauri-drag-region>
     <div class="text-sm">{{ title }}</div>
     <div class="window-controls flex items-center space-x-4">
       <el-icon class="cursor-pointer" @click="handleHelp">

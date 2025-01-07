@@ -136,8 +136,8 @@
 
 <script setup>
 import { ref, computed } from 'vue'
-import axios from 'axios'
 import { ElMessage } from 'element-plus'
+import { invoke } from '@tauri-apps/api/core'
 
 // 请求方法
 const methods = ['GET', 'POST', 'PUT', 'DELETE', 'PATCH']
@@ -211,27 +211,31 @@ const sendRequest = async () => {
   }
 
   loading.value = true
-  const startTime = Date.now()
 
   try {
+    // 构建请求配置
     const config = {
-      method: method.value.toLowerCase(),
+      method: method.value,
       url: url.value,
-      headers: headers.value.reduce((acc, curr) => {
-        if (curr.key && curr.value) acc[curr.key] = curr.value
-        return acc
-      }, {}),
+      headers: headers.value.filter(h => h.key && h.value),
+      body_type: bodyType.value,
+      body: null
     }
 
+    // 处理请求体
     if (bodyType.value === 'form-data') {
-      const formDataObj = new FormData()
+      const formDataObj = {}
       formData.value.forEach(item => {
-        if (item.key && item.value) formDataObj.append(item.key, item.value)
+        if (item.key && item.value) {
+          formDataObj[item.key] = item.value
+        }
       })
-      config.data = formDataObj
+      config.body = JSON.stringify(formDataObj)
     } else if (bodyType.value === 'json' && jsonBody.value) {
       try {
-        config.data = JSON.parse(jsonBody.value)
+        // 验证JSON格式
+        JSON.parse(jsonBody.value)
+        config.body = jsonBody.value
       } catch (e) {
         ElMessage.error('JSON格式错误')
         loading.value = false
@@ -239,22 +243,37 @@ const sendRequest = async () => {
       }
     }
 
-    const res = await axios(config)
+    // 调用Rust函数发送请求
+    const res = await invoke('send_request', { config })
+    
     response.value = {
       status: res.status,
-      headers: res.headers,
-      data: res.data,
-      time: Date.now() - startTime
+      headers: res.headers.reduce((acc, curr) => {
+        acc[curr.key] = curr.value
+        return acc
+      }, {}),
+      data: tryParseJson(res.data),
+      time: res.time
     }
   } catch (error) {
+    ElMessage.error(error.toString())
     response.value = {
-      status: error.response?.status || 500,
-      headers: error.response?.headers || {},
-      data: error.response?.data || error.message,
-      time: Date.now() - startTime
+      status: 500,
+      headers: {},
+      data: error.toString(),
+      time: 0
     }
   } finally {
     loading.value = false
+  }
+}
+
+// 尝试解析JSON
+const tryParseJson = (str) => {
+  try {
+    return JSON.parse(str)
+  } catch {
+    return str
   }
 }
 </script>
@@ -264,7 +283,7 @@ const sendRequest = async () => {
 .custom-input :deep(.el-input__wrapper),
 .custom-select :deep(.el-input__wrapper),
 .custom-textarea :deep(.el-textarea__inner) {
-  background-color: #141414 !important;
+  background-color: #252525 !important;
   box-shadow: 0 0 0 1px #333 !important;
   border-color: #333 !important;
 }
@@ -273,12 +292,12 @@ const sendRequest = async () => {
 .custom-select :deep(.el-input__inner),
 .custom-textarea :deep(.el-textarea__inner) {
   color: #e5e7eb !important;
-  background-color: #141414 !important;
+  background-color: #252525 !important;
 }
 
 /* 下拉菜单样式 */
 :deep(.el-select__popper) {
-  background-color: #141414 !important;
+  background-color: #252525 !important;
   border-color: #333 !important;
 }
 
@@ -293,7 +312,7 @@ const sendRequest = async () => {
 
 /* Tabs样式 */
 .custom-tabs {
-  background-color: #141414 !important;
+  background-color: #252525 !important;
   border-color: #333 !important;
 }
 
@@ -308,7 +327,7 @@ const sendRequest = async () => {
 }
 
 .custom-tabs :deep(.el-tabs__item.is-active) {
-  background-color: #141414 !important;
+  background-color: #252525 !important;
   border-bottom-color: #409eff !important;
   color: #409eff !important;
 }

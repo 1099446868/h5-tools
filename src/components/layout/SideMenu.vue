@@ -1,5 +1,5 @@
 <template>
-  <div class="left-sidebar w-[60px] fixed left-0 top-0 h-full bg-[#252525] flex flex-col">
+  <div class="left-sidebar w-[60px] fixed left-0 top-0 h-full bg-[#303030] flex flex-col">
     <div class="menu-items space-y-2 py-4">
       <div v-for="(item, index) in menuItems" 
            :key="index"
