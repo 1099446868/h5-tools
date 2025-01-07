@@ -11,6 +11,8 @@ import zhCn from 'element-plus/dist/locale/zh-cn.mjs'
 // 引入UnoCSS
 import 'uno.css'
 
+import '@/assets/dark/element.css'
+
 const app = createApp(App)
 
 // 注册所有图标

@@ -48,14 +48,14 @@
             />
             <el-button 
               @click="removeHeader(index)"
-              class="!bg-[#141414] !text-gray-300 !border-[#333] hover:!bg-[#1d1d1d]"
+              class="!bg-[#2e2e2e] !text-gray-300 !border-[#333] hover:!bg-[#1d1d1d]"
             >
               删除
             </el-button>
           </div>
           <el-button 
             @click="addHeader"
-            class="mt-2 !bg-[#141414] !text-gray-300 !border-[#333] hover:!bg-[#1d1d1d]"
+            class="mt-2 !bg-[#2e2e2e] !text-gray-300 !border-[#333] hover:!bg-[#1d1d1d]"
           >
             添加Header
           </el-button>
@@ -86,14 +86,14 @@
               />
               <el-button 
                 @click="removeFormData(index)"
-                class="!bg-[#141414] !text-gray-300 !border-[#333] hover:!bg-[#1d1d1d]"
+                class="!bg-[#2e2e2e] !text-gray-300 !border-[#333] hover:!bg-[#1d1d1d]"
               >
                 删除
               </el-button>
             </div>
             <el-button 
               @click="addFormData"
-              class="mt-2 !bg-[#141414] !text-gray-300 !border-[#333] hover:!bg-[#1d1d1d]"
+              class="mt-2 !bg-[#2e2e2e] !text-gray-300 !border-[#333] hover:!bg-[#1d1d1d]"
             >
               添加参数
             </el-button>
@@ -136,8 +136,8 @@
 
 <script setup>
 import { ref, computed } from 'vue'
+import axios from 'axios'
 import { ElMessage } from 'element-plus'
-import { invoke } from '@tauri-apps/api/core'
 
 // 请求方法
 const methods = ['GET', 'POST', 'PUT', 'DELETE', 'PATCH']
@@ -211,31 +211,27 @@ const sendRequest = async () => {
   }
 
   loading.value = true
+  const startTime = Date.now()
 
   try {
-    // 构建请求配置
     const config = {
-      method: method.value,
+      method: method.value.toLowerCase(),
       url: url.value,
-      headers: headers.value.filter(h => h.key && h.value),
-      body_type: bodyType.value,
-      body: null
+      headers: headers.value.reduce((acc, curr) => {
+        if (curr.key && curr.value) acc[curr.key] = curr.value
+        return acc
+      }, {}),
     }
 
-    // 处理请求体
     if (bodyType.value === 'form-data') {
-      const formDataObj = {}
+      const formDataObj = new FormData()
       formData.value.forEach(item => {
-        if (item.key && item.value) {
-          formDataObj[item.key] = item.value
-        }
+        if (item.key && item.value) formDataObj.append(item.key, item.value)
       })
-      config.body = JSON.stringify(formDataObj)
+      config.data = formDataObj
     } else if (bodyType.value === 'json' && jsonBody.value) {
       try {
-        // 验证JSON格式
-        JSON.parse(jsonBody.value)
-        config.body = jsonBody.value
+        config.data = JSON.parse(jsonBody.value)
       } catch (e) {
         ElMessage.error('JSON格式错误')
         loading.value = false
@@ -243,135 +239,27 @@ const sendRequest = async () => {
       }
     }
 
-    // 调用Rust函数发送请求
-    const res = await invoke('send_request', { config })
-    
+    const res = await axios(config)
     response.value = {
       status: res.status,
-      headers: res.headers.reduce((acc, curr) => {
-        acc[curr.key] = curr.value
-        return acc
-      }, {}),
-      data: tryParseJson(res.data),
-      time: res.time
+      headers: res.headers,
+      data: res.data,
+      time: Date.now() - startTime
     }
   } catch (error) {
-    ElMessage.error(error.toString())
     response.value = {
-      status: 500,
-      headers: {},
-      data: error.toString(),
-      time: 0
+      status: error.response?.status || 500,
+      headers: error.response?.headers || {},
+      data: error.response?.data || error.message,
+      time: Date.now() - startTime
     }
   } finally {
     loading.value = false
   }
 }
 
-// 尝试解析JSON
-const tryParseJson = (str) => {
-  try {
-    return JSON.parse(str)
-  } catch {
-    return str
-  }
-}
 </script>
 
 <style>
-/* 深色主题样式 */
-.custom-input :deep(.el-input__wrapper),
-.custom-select :deep(.el-input__wrapper),
-.custom-textarea :deep(.el-textarea__inner) {
-  background-color: #252525 !important;
-  box-shadow: 0 0 0 1px #333 !important;
-  border-color: #333 !important;
-}
-
-.custom-input :deep(.el-input__inner),
-.custom-select :deep(.el-input__inner),
-.custom-textarea :deep(.el-textarea__inner) {
-  color: #e5e7eb !important;
-  background-color: #252525 !important;
-}
-
-/* 下拉菜单样式 */
-:deep(.el-select__popper) {
-  background-color: #252525 !important;
-  border-color: #333 !important;
-}
-
-:deep(.el-select-dropdown__item) {
-  color: #e5e7eb !important;
-}
-
-:deep(.el-select-dropdown__item.hover),
-:deep(.el-select-dropdown__item:hover) {
-  background-color: #1d1d1d !important;
-}
-
-/* Tabs样式 */
-.custom-tabs {
-  background-color: #252525 !important;
-  border-color: #333 !important;
-}
-
-.custom-tabs :deep(.el-tabs__header) {
-  background-color: #1d1d1d !important;
-  border-bottom-color: #333 !important;
-}
-
-.custom-tabs :deep(.el-tabs__item) {
-  color: #e5e7eb !important;
-  border-color: #333 !important;
-}
-
-.custom-tabs :deep(.el-tabs__item.is-active) {
-  background-color: #252525 !important;
-  border-bottom-color: #409eff !important;
-  color: #409eff !important;
-}
-
-/* 响应结果样式 */
-.response-body {
-  font-family: 'Fira Code', monospace;
-  background-color: #141414;
-  color: #e5e7eb;
-  padding: 1rem;
-  border-radius: 4px;
-  white-space: pre-wrap;
-  word-wrap: break-word;
-  max-height: 400px;
-  overflow-y: auto;
-}
-
-/* Radio按钮组样式 */
-:deep(.el-radio-button__inner) {
-  background-color: #141414 !important;
-  border-color: #333 !important;
-  color: #e5e7eb !important;
-}
-
-:deep(.el-radio-button__original-radio:checked + .el-radio-button__inner) {
-  background-color: #409eff !important;
-  border-color: #409eff !important;
-  color: #fff !important;
-}
-
-/* 输入框placeholder颜色 */
-.custom-input :deep(.el-input__inner::placeholder),
-.custom-textarea :deep(.el-textarea__inner::placeholder) {
-  color: #666 !important;
-}
-
-/* 输入框hover和focus状态 */
-.custom-input :deep(.el-input__wrapper:hover),
-.custom-textarea :deep(.el-textarea__inner:hover) {
-  box-shadow: 0 0 0 1px #444 !important;
-}
-
-.custom-input :deep(.el-input__wrapper.is-focus),
-.custom-textarea :deep(.el-textarea__inner:focus) {
-  box-shadow: 0 0 0 1px #409eff !important;
-}
+/* @import url('@/assets/dark/element.css');*/
 </style> 

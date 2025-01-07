@@ -16,7 +16,7 @@
       <el-card 
         v-for="(card, index) in functionCards" 
         :key="index"
-        class="bg-[#252525] border-none hover:bg-[#2a2a2a] transition-colors cursor-pointer"
+        class="bg-[#2e2e2e] border-none hover:bg-[#2a2a2a] transition-colors cursor-pointer"
         shadow="never">
         <template #header>
           <div class="flex items-center space-x-2">
@@ -136,7 +136,7 @@ const functionCards = ref([
 }
 
 :deep(.el-card) {
-  --el-card-bg-color: #252525;
+  --el-card-bg-color: #2e2e2e;
   --el-card-border-color: transparent;
 }
 

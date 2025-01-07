@@ -1,5 +1,5 @@
 <template>
-  <div class="app-container bg-[#1a1a1a] min-h-screen text-gray-200">
+  <div class="app-container bg-[#262626] min-h-screen text-gray-200">
     <SideMenu />
     <div class="main-content ml-[60px] h-screen flex flex-col">
       <TitleBar />

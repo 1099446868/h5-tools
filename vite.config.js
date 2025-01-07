@@ -5,6 +5,7 @@ import Components from "unplugin-vue-components/vite";
 import { ElementPlusResolver } from "unplugin-vue-components/resolvers";
 import UnoCSS from 'unocss/vite'
 import { presetUno, presetAttributify, presetIcons } from 'unocss'
+import path from 'path'
 
 const host = process.env.TAURI_DEV_HOST;
 
@@ -35,6 +36,12 @@ export default defineConfig(async () => ({
       },
     }),
   ],
+
+  resolve: {
+    alias: {
+      '@': path.resolve(__dirname, 'src')
+    }
+  },
 
   // Vite options tailored for Tauri development and only applied in `tauri dev` or `tauri build`
   //

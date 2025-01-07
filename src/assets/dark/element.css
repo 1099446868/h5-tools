@@ -1,0 +1,108 @@
+:root {
+    --el-form-bg-color: #2e2e2e;
+    --primary-color: #42b983;
+    --font-size: 16px;
+}
+
+/* 深色主题样式 */
+.custom-input .el-input__wrapper,
+.custom-select .el-select__wrapper,
+.custom-textarea .el-textarea__inner  {
+    background-color: var(--el-form-bg-color);
+    box-shadow: 0 0 0 1px #333;
+    border-color: #333;
+}
+
+
+.custom-input .el-input__inner,
+.custom-select .el-select__inner,
+.custom-textarea .el-textarea__inner {
+    /*color: #e5e7eb !important;*/
+    /*background-color: #282828 !important;*/
+}
+
+/* 下拉菜单样式 */
+.el-select__popper.el-popper[data-popper-placement^=bottom] .el-popper__arrow:before {
+    border-color: #3a3a3a;
+    background: #2a2929;
+}
+.el-select__popper.el-popper {
+    background-color: #282828 !important;
+    border-color: #333 !important;
+}
+
+.el-select-dropdown__item {
+    color: #ffffff !important;
+    background-color: #282828 !important;
+}
+
+.el-select-dropdown__item.hover,
+.el-select-dropdown__item:hover {
+    background-color: #3a3a3a !important;
+}
+
+/* Tabs样式 */
+.custom-tabs {
+    background-color: #2e2e2e !important;
+    border-color: #333 !important;
+}
+
+.custom-tabs .el-tabs__header {
+    background-color: #383838 !important;
+    border-bottom-color: #333 !important;
+}
+
+.custom-tabs .el-tabs__item {
+    color: #e5e7eb !important;
+    border-color: #333 !important;
+}
+
+.custom-tabs .el-tabs__item.is-active {
+    background-color: #2e2e2e !important;
+    border-bottom-color: #409eff !important;
+    color: #409eff !important;
+}
+
+/* 响应结果样式 */
+.response-body {
+    font-family: 'Fira Code', monospace;
+    background-color: #2e2e2e;
+    color: #e5e7eb;
+    padding: 1rem;
+    border-radius: 4px;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    max-height: 400px;
+    overflow-y: auto;
+}
+
+/* Radio按钮组样式 */
+.el-radio-button__inner {
+    background-color: #2e2e2e !important;
+    border-color: #333 !important;
+    color: #e5e7eb !important;
+}
+
+.el-radio-button__original-radio:checked + .el-radio-button__inner {
+    background-color: #409eff !important;
+    border-color: #409eff !important;
+    color: #fff !important;
+}
+
+/* 输入框placeholder颜色 */
+.custom-input .el-input__inner::placeholder,
+.custom-textarea .el-textarea__inner::placeholder {
+    color: #666 !important;
+}
+
+/* 输入框hover和focus状态 */
+.custom-input .el-input__wrapper:hover,
+.custom-textarea :deep(.el-textarea__inner:hover) {
+    box-shadow: 0 0 0 1px #444 !important;
+    /*border-color: unset;*/
+}
+
+.custom-input .el-input__wrapper.is-focus,
+.custom-textarea :deep(.el-textarea__inner:focus) {
+    box-shadow: 0 0 0 1px #409eff !important;
+}
