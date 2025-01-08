@@ -27,7 +27,8 @@ const menuItems = ref([
   { icon: 'Timer', route: '/time', title: '时间转换' },
   { icon: 'Document-copy', route: '/json-view', title: 'json视图' },
   { icon: 'Dessert', route: '/icon-picker', title: '图标选择器' },
-  { icon: 'Setting', route: '/settings' }
+  { icon: 'Setting', route: '/settings' },
+  { icon: 'Connection', route: '/api-test-index', title: 'API测试-融合' }
 ])
 
 if (isTauriApp()) {

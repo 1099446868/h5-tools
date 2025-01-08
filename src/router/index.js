@@ -44,6 +44,14 @@ const routes = [
     }
   },
   {
+    path: '/api-test-index',
+    name: 'ApiTesterIndex',
+    component: () => import('../views/ApiTester/index.vue'),
+    meta: {
+      title: 'API测试-融合'
+    }
+  },
+  {
     path: '/json-view',
     name: 'JsonView',
     component: () => import('../views/JsonView.vue'),
