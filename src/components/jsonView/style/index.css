@@ -1,0 +1,82 @@
+.json-view-container {
+    background-color: #fff;
+  }
+  .json-view-container.deep-1 {
+    padding-right: 10px;
+  }
+  .json-view-container .json-view {
+    position: relative;
+    display: block;
+    width: 100%;
+    height: 100%;
+    white-space: nowrap;
+    padding-left: 2rem;
+    box-sizing: border-box;
+    font-family: Consolas !important;
+    cursor: default;
+  }
+  .json-view-container .json-view .json-note {
+    color: #909399;
+    font-size: 12px;
+    font-style: italic;
+  }
+  .json-view-container .json-view .json-key {
+    color: #8c6325;
+  }
+  .json-view-container .json-view .json-value {
+    display: inline-block;
+    color: #57b73b;
+    word-break: break-all;
+    white-space: normal;
+  }
+  .json-view-container .json-view .json-value.number {
+    color: #2d8cf0;
+  }
+  .json-view-container .json-view .json-value.string {
+    color: #57b73b;
+  }
+  .json-view-container .json-view .json-value.boolean {
+    color: #eb3324;
+  }
+  .json-view-container .json-view .json-value.null {
+    color: #eb3324;
+  }
+  .json-view-container .json-view .json-item {
+    margin: 0;
+    padding-left: 2rem;
+    display: flex;
+  }
+  .json-view-container .json-view .first-line {
+    padding: 0;
+    margin: 0;
+  }
+  .json-view-container .json-view .first-line.pointer {
+    cursor: pointer!important;
+  }
+  .json-view-container .json-view .json-body {
+    position: relative;
+    padding: 0;
+    margin: 0;
+  }
+  .json-view-container .json-view .json-body .base-line {
+    position: absolute;
+    height: 100%;
+    border-left: 1px dashed #bbb;
+    top: 0;
+    left: 2px;
+  }
+  .json-view-container .json-view .last-line {
+    padding: 0;
+    margin: 0;
+  }
+  .json-view-container .json-view .angle {
+    position: absolute;
+    display: block;
+    cursor: pointer;
+    float: left;
+    width: 20px;
+    text-align: center;
+    /*left: ~"calc(2rem - 18px)";*/
+    left: 12px;
+  }
+  

@@ -4,6 +4,10 @@
 
 <script setup>
 import AppLayout from './components/layout/AppLayout.vue'
+import { isTauriApp, getEnvironmentInfo } from './utils/environment'
+
+console.log(isTauriApp())
+console.log(getEnvironmentInfo())
 </script>
 
 <style>
@@ -16,19 +20,21 @@ import AppLayout from './components/layout/AppLayout.vue'
   padding: 0;
 }
 
-html, body {
+html,
+body {
   height: 100%;
   margin: 0;
   padding: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen,
-    Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell,
+    'Open Sans', 'Helvetica Neue', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   overflow: hidden; /* 防止出现双滚动条 */
 }
 
 /* 移除列表样式 */
-ul, ol {
+ul,
+ol {
   list-style: none;
 }
 
@@ -47,7 +53,8 @@ button {
 }
 
 /* 移除输入框默认样式 */
-input, textarea {
+input,
+textarea {
   border: none;
   outline: none;
 }
@@ -113,8 +120,8 @@ html {
 }
 
 /* 移除表单元素的默认样式 */
-input[type="number"]::-webkit-inner-spin-button,
-input[type="number"]::-webkit-outer-spin-button {
+input[type='number']::-webkit-inner-spin-button,
+input[type='number']::-webkit-outer-spin-button {
   -webkit-appearance: none;
   margin: 0;
 }
@@ -126,7 +133,7 @@ body {
 }
 
 /* 移除 Firefox 的输入框内部填充 */
-input[type="number"] {
+input[type='number'] {
   -moz-appearance: textfield;
 }
 </style>

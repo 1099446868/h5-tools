@@ -1,5 +1,5 @@
-import { createApp } from "vue";
-import App from "./App.vue";
+import { createApp } from 'vue'
+import App from './App.vue'
 import router from './router'
 // 引入Element Plus
 import ElementPlus from 'element-plus'
@@ -12,7 +12,7 @@ import zhCn from 'element-plus/dist/locale/zh-cn.mjs'
 import 'uno.css'
 
 import '@/assets/dark/element.css'
-
+import 'element-plus/theme-chalk/dark/css-vars.css'
 const app = createApp(App)
 
 // 注册所有图标
@@ -23,7 +23,7 @@ for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
 // 使用路由和Element Plus
 app.use(router)
 app.use(ElementPlus, {
-  locale: zhCn,
+  locale: zhCn
 })
 
-app.mount("#app");
+app.mount('#app')

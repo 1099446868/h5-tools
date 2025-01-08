@@ -111,6 +111,12 @@ async fn send_request(
     })
 }
 
+// 判断是否是tauri
+#[tauri::command]
+fn is_tauri() -> bool {
+    true
+}
+
 fn main() {
     run()
 }
@@ -124,6 +130,7 @@ fn run() {
     .plugin(tauri_plugin_clipboard_manager::init())
     .plugin(tauri_plugin_dialog::init())
     .plugin(tauri_plugin_opener::init())
+    .invoke_handler(tauri::generate_handler![is_tauri])
     .run(tauri::generate_context!())
     .expect("error while running tauri application");
 }

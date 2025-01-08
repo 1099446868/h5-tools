@@ -30,9 +30,33 @@ const routes = [
   {
     path: '/api-test',
     name: 'ApiTester',
-    component: () => import('../views/ApiTester.vue'),
+    component: () => import('../views/ApiTester/web.vue'),
     meta: {
       title: 'API测试'
+    }
+  },
+  {
+    path: '/api-test-desktop',
+    name: 'ApiTesterDesktop',
+    component: () => import('../views/ApiTester/desktop.vue'),
+    meta: {
+      title: 'API测试-桌面'
+    }
+  },
+  {
+    path: '/json-view',
+    name: 'JsonView',
+    component: () => import('../views/JsonView.vue'),
+    meta: {
+      title: 'json视图'
+    }
+  },
+  {
+    path: '/icon-picker',
+    name: 'IconPicker',
+    component: () => import('../components/IconPicker/IconPicker.vue'),
+    meta: {
+      title: '图标选择器'
     }
   }
 ]
@@ -50,4 +74,4 @@ router.beforeEach((to, from, next) => {
   next()
 })
 
-export default router 
+export default router
