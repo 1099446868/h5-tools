@@ -141,12 +141,6 @@ watch(
 </template>
 
 <style scoped>
-:root {
-  --el-icon-border-color: #262626;
-}
-.ep-icon-picker :deep(.el-tabs__item .is-top) {
-  color: #ffffff !important;
-}
 .icon-search {
   width: 150px;
 }

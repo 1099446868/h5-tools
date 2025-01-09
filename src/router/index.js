@@ -32,7 +32,7 @@ const routes = [
     name: 'ApiTester',
     component: () => import('../views/ApiTester/web.vue'),
     meta: {
-      title: 'API测试'
+      title: 'API测试-web'
     }
   },
   {
@@ -41,14 +41,6 @@ const routes = [
     component: () => import('../views/ApiTester/desktop.vue'),
     meta: {
       title: 'API测试-桌面'
-    }
-  },
-  {
-    path: '/api-test-index',
-    name: 'ApiTesterIndex',
-    component: () => import('../views/ApiTester/index.vue'),
-    meta: {
-      title: 'API测试-融合'
     }
   },
   {

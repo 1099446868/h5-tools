@@ -34,4 +34,4 @@ import TitleBar from './TitleBar.vue'
 .fade-leave-to {
   @apply opacity-0;
 }
-</style> 
+</style>

@@ -4,10 +4,6 @@
 
 <script setup>
 import AppLayout from './components/layout/AppLayout.vue'
-import { isTauriApp, getEnvironmentInfo } from './utils/environment'
-
-console.log(isTauriApp())
-console.log(getEnvironmentInfo())
 </script>
 
 <style>
