@@ -124,7 +124,7 @@ const functionCards = ref([
 
 <style scoped>
 .welcome-banner {
-  background-image: url('@/assets/banner-bg.jpg');
+  background-image: url('@/assets/banner2.jpg');
   background-size: cover;
   background-position: center;
 }
