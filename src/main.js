@@ -11,7 +11,7 @@ import zhCn from 'element-plus/dist/locale/zh-cn.mjs'
 // 引入UnoCSS
 import 'uno.css'
 
-import '@/assets/dark/element.css'
+// import '@/assets/dark/element.css'
 import 'element-plus/theme-chalk/dark/css-vars.css'
 const app = createApp(App)
 

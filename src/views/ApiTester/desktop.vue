@@ -10,7 +10,7 @@ const response = ref(null)
 
 // 发送请求
 const sendRequest = async () => {
-  const params = apiView.value.params
+  const params = apiView.value.configs
   if (!params.url) {
     ElMessage.error('请输入请求URL')
     return
@@ -51,14 +51,13 @@ const sendRequest = async () => {
 
     // 调用Rust函数发送请求
     const res = await invoke('send_request', { config })
-
     response.value = {
       status: res.status,
       headers: res.headers.reduce((acc, curr) => {
         acc[curr.key] = curr.value
         return acc
       }, {}),
-      data: tryParseJson(res.data),
+      data: res.data,
       time: res.time
     }
   } catch (error) {

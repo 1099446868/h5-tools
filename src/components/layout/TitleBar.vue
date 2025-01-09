@@ -1,8 +1,9 @@
 <template>
   <div
-    class="title-bar h-[40px] bg-[#303030] flex items-center justify-between px-4"
+    class="title-bar h-[40px] flex items-center justify-between px-4 bg-[--el-color-info-light-9]"
     data-tauri-drag-region
   >
+    <!--- bg-[#303030] --->
     <div class="text-sm">{{ title }}</div>
     <div class="window-controls flex items-center space-x-4">
       <el-button
@@ -39,8 +40,6 @@ import { useTheme } from '@/utils/theme'
 import { useToggle } from '@vueuse/core'
 
 const { isDark, toggleDark } = useTheme()
-// toggleDark()
-useToggle()
 
 // 监听主题变化，动态加载 Element Plus 的主题样式
 watch(

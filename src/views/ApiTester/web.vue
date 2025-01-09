@@ -10,8 +10,7 @@ const response = ref(null)
 
 // 发送请求
 const sendRequest = async () => {
-  const params = apiView.value.params
-  console.log(params)
+  const params = apiView.value.configs
   if (!params.url) {
     ElMessage.error('请输入请求URL')
     return
@@ -45,7 +44,6 @@ const sendRequest = async () => {
     }
 
     const res = await axios(config)
-    console.log(res)
     response.value = {
       status: res.status,
       headers: res.headers,

@@ -1,15 +1,15 @@
 <template>
   <div class="p-6">
-    <el-card class="mb-4 !bg-[#252525] !border-none">
+    <el-card class="mb-4 !border-none">
       <template #header>
-        <div class="flex-between !border-b !border-[#333]">
-          <span class="text-lg font-bold text-gray-200">时间转换工具</span>
+        <div class="flex-between !border-b">
+          <span class="text-lg font-bold">时间转换工具</span>
         </div>
       </template>
-      
+
       <!-- 时间戳转日期时间 -->
       <div class="mb-6">
-        <h3 class="text-base mb-4 text-gray-300">时间戳转日期时间</h3>
+        <h3 class="text-base mb-4">时间戳转日期时间</h3>
         <div class="flex items-center gap-4">
           <el-input
             v-model="timestamp"
@@ -18,9 +18,7 @@
             @input="handleTimestampInput"
           >
             <template #append>
-              <el-button @click="getCurrentTimestamp" class="!bg-[#333] !text-gray-200 !border-none">
-                当前时间戳
-              </el-button>
+              <el-button @click="getCurrentTimestamp" class="!border-none"> 当前时间戳 </el-button>
             </template>
           </el-input>
           <el-input
@@ -29,12 +27,13 @@
             class="!w-64 custom-input"
             readonly
           />
+          <el-button @click="copyTime(dateTimeStr)"> <Icon icon="ep:copy-document" /> </el-button>
         </div>
       </div>
 
       <!-- 日期时间转时间戳 -->
       <div>
-        <h3 class="text-base mb-4 text-gray-300">日期时间转时间戳</h3>
+        <h3 class="text-base mb-4">日期时间转时间戳</h3>
         <div class="flex items-center gap-4">
           <el-date-picker
             v-model="dateTime"
@@ -51,30 +50,25 @@
             class="!w-64 custom-input"
             readonly
           />
+          <el-button @click="copyTime(convertedTimestamp)">
+            <Icon icon="ep:copy-document" />
+          </el-button>
         </div>
       </div>
     </el-card>
 
     <!-- 常用时间格式 -->
-    <el-card class="!bg-[#252525] !border-none">
+    <el-card class="!border-none">
       <template #header>
-        <div class="flex-between !border-b !border-[#333]">
-          <span class="text-lg font-bold text-gray-200">当前时间的常用格式</span>
-          <el-button 
-            @click="updateCurrentTime"
-            class="!bg-[#333] !text-gray-200 !border-none hover:!bg-[#444]"
-          >
-            刷新
-          </el-button>
+        <div class="flex-between !border-b">
+          <span class="text-lg font-bold">当前时间的常用格式</span>
+          <el-button @click="updateCurrentTime" class="!border-none"> 刷新 </el-button>
         </div>
       </template>
       <div class="grid grid-cols-2 gap-4">
-        <div v-for="(time, format) in commonTimeFormats" 
-             :key="format" 
-             class="flex-between"
-        >
-          <span class="text-gray-400">{{ format }}:</span>
-          <span class="text-gray-200">{{ time }}</span>
+        <div v-for="(time, format) in commonTimeFormats" :key="format" class="flex-between">
+          <span>{{ format }}:</span>
+          <span>{{ time }}</span>
         </div>
       </div>
     </el-card>
@@ -84,6 +78,10 @@
 <script setup>
 import { ref, onMounted, onUnmounted } from 'vue'
 import dayjs from 'dayjs'
+import { Icon } from '@/components/Icon'
+import { writeText } from '@tauri-apps/plugin-clipboard-manager'
+import { ElMessage } from 'element-plus'
+import { isTauriApp } from '@/utils/environment'
 
 // 时间戳转日期时间
 const timestamp = ref('')
@@ -157,91 +155,17 @@ onUnmounted(() => {
     clearInterval(timer)
   }
 })
+
+const copyTime = async dateTimeStr => {
+  if (isTauriApp()) {
+    await writeText(dateTimeStr)
+  } else {
+    navigator.clipboard.writeText(dateTimeStr)
+  }
+  ElMessage.info('已复制')
+}
 </script>
 
 <style>
 /* 自定义输入框样式 */
-.custom-input :deep(.el-input__wrapper) {
-  background-color: #333 !important;
-  box-shadow: none !important;
-}
-
-.custom-input :deep(.el-input__inner) {
-  color: #e5e7eb !important;
-  background-color: #333 !important;
-}
-
-.custom-input :deep(.el-input__inner::placeholder) {
-  color: #666 !important;
-}
-
-/* 自定义日期选择器样式 */
-.custom-date-picker :deep(.el-input__wrapper) {
-  background-color: #333 !important;
-  box-shadow: none !important;
-}
-
-.custom-date-picker :deep(.el-input__inner) {
-  color: #e5e7eb !important;
-}
-
-/* 日期选择器弹出层样式 */
-:deep(.el-picker__popper) {
-  background-color: #252525 !important;
-  border-color: #333 !important;
-}
-
-:deep(.el-picker-panel) {
-  background-color: #252525 !important;
-  border-color: #333 !important;
-  color: #e5e7eb !important;
-}
-
-:deep(.el-date-picker__header) {
-  color: #e5e7eb !important;
-}
-
-:deep(.el-picker-panel__icon-btn) {
-  color: #e5e7eb !important;
-}
-
-:deep(.el-date-picker__header-label) {
-  color: #e5e7eb !important;
-}
-
-:deep(.el-date-table th) {
-  color: #888 !important;
-}
-
-:deep(.el-date-table td.available:hover) {
-  color: #409eff !important;
-}
-
-:deep(.el-date-table td) {
-  color: #e5e7eb !important;
-}
-
-:deep(.el-date-table td.next-month),
-:deep(.el-date-table td.prev-month) {
-  color: #666 !important;
-}
-
-:deep(.el-time-panel) {
-  background-color: #252525 !important;
-  border-color: #333 !important;
-}
-
-:deep(.el-time-panel__content::after),
-:deep(.el-time-panel__content::before) {
-  background-color: #333 !important;
-}
-
-:deep(.el-time-spinner__item:hover:not(.disabled):not(.active)) {
-  background: #333 !important;
-}
-
-:deep(.el-time-panel__footer) {
-  background-color: #252525 !important;
-  border-color: #333 !important;
-}
-</style> 
+</style>

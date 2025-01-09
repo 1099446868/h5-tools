@@ -11,41 +11,38 @@
           :class="getMethodClass(item)"
         />
       </el-select>
-      <el-input v-model="url" placeholder="请输入请求URL" class="flex-1 custom-input" />
-      <el-button
-        type="primary"
-        @click="sendRequest"
-        :loading="loading"
-        class="!bg-[#409eff] !border-none hover:!bg-[#66b1ff]"
-      >
-        发送请求
-      </el-button>
+      <el-input
+        v-model="url"
+        @input="updateParams"
+        placeholder="请输入请求URL"
+        class="flex-1 custom-input"
+      />
+      <el-button type="primary" @click="sendRequest" :loading="loading"> 发送请求 </el-button>
     </div>
 
     <!-- 请求参数配置 -->
     <el-tabs type="border-card" class="custom-tabs">
-      <!-- Headers -->
-      <el-tab-pane label="Headers">
+      <!-- Params -->
+      <el-tab-pane label="Params">
         <div class="params-editor">
-          <div v-for="(header, index) in headers" :key="index" class="mb-2 flex gap-2">
-            <el-input v-model="header.key" placeholder="Key" class="custom-input" />
-            <el-input v-model="header.value" placeholder="Value" class="custom-input" />
-            <el-button
-              @click="removeHeader(index)"
-              class="!bg-[#2e2e2e] !text-gray-300 !border-[#333] hover:!bg-[#1d1d1d]"
-            >
-              删除
-            </el-button>
+          <div v-for="(param, index) in params" :key="index" class="mb-2 flex gap-2">
+            <el-input
+              v-model="param.key"
+              @input="updateUrl"
+              placeholder="Key"
+              class="custom-input"
+            />
+            <el-input
+              v-model="param.value"
+              @input="updateUrl"
+              placeholder="Value"
+              class="custom-input"
+            />
+            <el-button @click="removeParam(index)"> 删除 </el-button>
           </div>
-          <el-button
-            @click="addHeader"
-            class="mt-2 !bg-[#2e2e2e] !text-gray-300 !border-[#333] hover:!bg-[#1d1d1d]"
-          >
-            添加Header
-          </el-button>
+          <el-button @click="addParam" class="mt-2"> 添加 </el-button>
         </div>
       </el-tab-pane>
-
       <!-- Body -->
       <el-tab-pane label="Body">
         <div class="body-editor">
@@ -60,19 +57,9 @@
             <div v-for="(param, index) in formData" :key="index" class="mb-2 flex gap-2">
               <el-input v-model="param.key" placeholder="Key" class="custom-input" />
               <el-input v-model="param.value" placeholder="Value" class="custom-input" />
-              <el-button
-                @click="removeFormData(index)"
-                class="!bg-[#2e2e2e] !text-gray-300 !border-[#333] hover:!bg-[#1d1d1d]"
-              >
-                删除
-              </el-button>
+              <el-button @click="removeFormData(index)"> 删除 </el-button>
             </div>
-            <el-button
-              @click="addFormData"
-              class="mt-2 !bg-[#2e2e2e] !text-gray-300 !border-[#333] hover:!bg-[#1d1d1d]"
-            >
-              添加参数
-            </el-button>
+            <el-button @click="addFormData" class="mt-2"> 添加 </el-button>
           </div>
 
           <!-- Raw JSON -->
@@ -88,6 +75,17 @@
           </div>
         </div>
       </el-tab-pane>
+      <!-- Headers -->
+      <el-tab-pane label="Headers">
+        <div class="params-editor">
+          <div v-for="(header, index) in headers" :key="index" class="mb-2 flex gap-2">
+            <el-input v-model="header.key" placeholder="Key" class="custom-input" />
+            <el-input v-model="header.value" placeholder="Value" class="custom-input" />
+            <el-button @click="removeHeader(index)"> 删除 </el-button>
+          </div>
+          <el-button @click="addHeader" class="mt-2"> 添加 </el-button>
+        </div>
+      </el-tab-pane>
     </el-tabs>
 
     <!-- 响应结果 -->
@@ -97,7 +95,18 @@
           <span :class="responseStatusClass">状态码: {{ response.status }}</span>
           <span class="text-gray-400">耗时: {{ response.time }}ms</span>
         </div>
-        <pre class="response-body">{{ formattedResponse }}</pre>
+        <pre v-if="isString(formattedResponse)" class="response-body">{{ formattedResponse }}</pre>
+        <JsonView
+          v-else
+          :data="formattedResponse"
+          :theme="theme"
+          :deep="deep"
+          :iconStyle="iconStyle"
+          :fontSize="fontSize"
+          :lineHeight="lineHeight"
+          :closed="closed"
+          :iconColor="iconColor"
+        />
       </el-tab-pane>
       <el-tab-pane label="Headers">
         <div class="response-headers">
@@ -113,13 +122,36 @@
 
 <script setup>
 import { ref, computed, defineProps } from 'vue'
-import axios from 'axios'
 import { ElMessage } from 'element-plus'
+import JsonView from '@/components/jsonView/index.vue'
+import { isString } from '@/utils/is'
+import { useTheme } from '@/utils/theme'
 
 const props = defineProps({
   sendRequest: Function,
   loading: Boolean,
   response: Object
+})
+
+const { isDark } = useTheme()
+
+const theme = computed(() => {
+  return isDark.value ? 'one-dark' : ''
+})
+const closed = ref(false)
+const deep = ref(3)
+const iconStyle = ref('triangle')
+const color1 = ref('#818181')
+const color2 = ref('#818181')
+const fontSize = ref(14)
+const lineHeight = ref(24)
+
+const iconColor = computed(() => {
+  if (color1.value && color2.value) {
+    return [color1.value, color2.value]
+  } else {
+    return []
+  }
 })
 
 // 请求方法
@@ -130,8 +162,29 @@ const url = ref('')
 
 // Headers
 const headers = ref([{ key: '', value: '' }])
+const params = ref([{ key: '', value: '' }])
+const updateParams = () => {
+  let searchStr = new URL(url.value).search
+  let searchParams = new URLSearchParams(searchStr)
+  params.value = Array.from(searchParams.entries()).map(([key, value]) => ({ key, value }))
+}
+
+const updateUrl = () => {
+  let searchUrl = new URL(url.value).origin + new URL(url.value).pathname
+  let searchParams = new URLSearchParams()
+  params.value.forEach(({ key, value }) => {
+    searchParams.set(key, value)
+  })
+  searchUrl += '?' + searchParams.toString()
+  url.value = searchUrl
+}
 const addHeader = () => headers.value.push({ key: '', value: '' })
 const removeHeader = index => headers.value.splice(index, 1)
+const addParam = () => params.value.push({ key: '', value: '' })
+const removeParam = index => {
+  params.value.splice(index, 1)
+  updateUrl()
+}
 
 // Body
 const bodyType = ref('none')
@@ -179,7 +232,7 @@ const formattedResponse = computed(() => {
   const res = props.response
   if (!res) return ''
   try {
-    return JSON.stringify(res.data, null, 2)
+    return isString(res.data) ? JSON.parse(res.data) : res.data
   } catch {
     return res.data
   }
@@ -193,7 +246,7 @@ const checkJson = () => {
   }
 }
 
-const params = computed(() => {
+const configs = computed(() => {
   return {
     method: method.value.toLowerCase(),
     url: url.value,
@@ -210,10 +263,8 @@ const params = computed(() => {
 })
 
 defineExpose({
-  params
+  configs
 })
 </script>
 
-<style>
-/* @import url('@/assets/dark/element.css');*/
-</style>
+<style></style>

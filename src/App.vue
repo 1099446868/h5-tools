@@ -124,8 +124,8 @@ input[type='number']::-webkit-outer-spin-button {
 
 /* 设置基础文本颜色和背景 */
 body {
-  color: #fff;
-  background: #1e1e1e;
+  color: var(--el-text-color-primary);
+  background: var(--el-bg-color);
 }
 
 /* 移除 Firefox 的输入框内部填充 */

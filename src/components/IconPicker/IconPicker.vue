@@ -84,7 +84,7 @@ watch(
 
 <template>
   <div :class="prefixCls">
-    <div class="flex justify-center items-center box">
+    <div class="mt-10px flex justify-center items-center box">
       <el-input
         v-model="search"
         class="mb-20px icon-search"
