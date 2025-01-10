@@ -45,6 +45,27 @@ const formatJson = async () => {
     text.value =  JSON.stringify(JSON.parse(text.value), null, 4)
   }
 }
+
+const toUnicode = () => {
+  let unicodeStr = '';
+  let str = text.value
+  for (let i = 0; i < str.length; i++) {
+    let char = str[i];
+    // 判断字符是否为中文字符（Unicode 范围）
+    if (/[\u4e00-\u9fa5]/.test(char)) {
+      let charCode = char.charCodeAt(0);
+      unicodeStr += '\\u' + ('0000' + charCode.toString(16)).slice(-4); // 转为四位十六进制
+    } else {
+      unicodeStr += char; // 非中文字符直接添加
+    }
+  }
+  text.value = unicodeStr;
+}
+
+const toChinese = () => {
+  text.value = JSON.stringify(JSON.parse(text.value))
+}
+
 </script>
 <template>
   <div class="m-5">
@@ -61,8 +82,8 @@ const formatJson = async () => {
         <el-button @click="compress"> 压缩 </el-button>
         <el-button> 转义 </el-button>
         <el-button> 去转义 </el-button>
-        <el-button> Unicode转中文 </el-button>
-        <el-button> 中文转Unicode </el-button>
+        <el-button @click="toChinese"> Unicode转中文 </el-button>
+        <el-button @click="toUnicode"> 中文转Unicode </el-button>
       </el-tab-pane>
       <el-tab-pane label="base64">
         <el-button> decode </el-button>
