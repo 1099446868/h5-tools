@@ -20,7 +20,6 @@
 <script setup>
 import { ref, computed } from 'vue'
 import { useRouter } from 'vue-router'
-import { HomeFilled, Setting, Tools, Timer, Connection } from '@element-plus/icons-vue'
 import { isTauriApp } from '@/utils/environment'
 import { useTheme } from '@/utils/theme'
 import { Icon } from '@/components/Icon'

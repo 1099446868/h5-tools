@@ -83,7 +83,7 @@ watch(
 </script>
 
 <template>
-  <div :class="prefixCls">
+  <div :class="prefixCls + ' m-5'">
     <div class="mt-10px flex justify-center items-center box">
       <el-input
         v-model="search"
