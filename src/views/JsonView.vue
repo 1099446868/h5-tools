@@ -34,14 +34,33 @@ const iconColor = computed(() => {
     return []
   }
 })
+
+const compress = async () => {
+  if (isJsonString(text.value)) {
+    text.value = JSON.stringify(JSON.parse(text.value))
+  }
+}
+const formatJson = async () => {
+  if (isJsonString(text.value)) {
+    text.value =  JSON.stringify(JSON.parse(text.value), null, 4)
+  }
+}
 </script>
 <template>
   <div class="m-5">
+    <el-affix :offset="60" class="fixed right-100px bottom-100px z-100 p-0">
+      <el-anchor :offset="-70">
+        <el-anchor-link>
+          回到顶部
+        </el-anchor-link>
+      </el-anchor>
+    </el-affix>
     <el-tabs tab-position="top" v-model="activeName" class="mb-5">
       <el-tab-pane label="JSON" name="json">
-        <el-button> 格式化 </el-button>
-        <el-button> 压缩 </el-button>
-        <el-button> 去转移 </el-button>
+        <el-button @click="formatJson"> 格式化 </el-button>
+        <el-button @click="compress"> 压缩 </el-button>
+        <el-button> 转义 </el-button>
+        <el-button> 去转义 </el-button>
         <el-button> Unicode转中文 </el-button>
         <el-button> 中文转Unicode </el-button>
       </el-tab-pane>
@@ -55,10 +74,10 @@ const iconColor = computed(() => {
       </el-tab-pane>
     </el-tabs>
     <el-row :gutter="20">
-      <el-col :span="10">
+      <el-col :span="12">
         <el-input v-model="text" type="textarea" :rows="30" />
       </el-col>
-      <el-col :span="10">
+      <el-col :span="12">
         <JsonView
           v-if="json !== ''"
           :data="json"
@@ -74,4 +93,12 @@ const iconColor = computed(() => {
     </el-row>
   </div>
 </template>
-<style></style>
+<style scoped>
+:deep(.el-anchor__list) {
+  padding: 0 !important;
+}
+:deep(.el-anchor__link) {
+  padding: 0;
+  display: contents;
+}
+</style>
