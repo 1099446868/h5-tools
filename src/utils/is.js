@@ -82,7 +82,7 @@ export const isHtml = str => {
 }
 
 export const isJsonString = str => {
-  return isString(str) && str.startsWith('{') && str.endsWith('}')
+  return isString(str) && ( ( str.startsWith('{') && str.endsWith('}') ) || ( str.startsWith('[') && str.endsWith(']') ) )
 }
 
 export const isXmlString = str => {
